@@ -19,6 +19,10 @@
                         class="mb-4"
                         clearable
                     />
+
+                    <v-btn color="primary" class="mb-4" @click="irParaCadastro">
+                        Novo Cliente
+                    </v-btn>
                     <v-data-table
                         :headers="headers"
                         :items="clientesFiltrados"
@@ -48,10 +52,16 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue'
     import axios from 'axios'
+    import { useRouter } from 'vue-router'
 
+    const router = useRouter()
     const filtroStatus = ref('Todos')
     const search = ref('')
     const clientes = ref([])
+
+    const irParaCadastro = () => {
+        router.push('/cadastrar')
+    }
     
     const headers = [
         { title: 'Nome', value: 'nome' },
