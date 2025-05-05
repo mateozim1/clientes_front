@@ -40,12 +40,12 @@
                             </div>
                         
                             <div v-else-if="currentStep === 2">
-                                <v-text-field v-model="endereco.endereco" label="Endereço" maxlength="255" :error-messages="erros.endereco" required />
-                                <v-text-field v-model="endereco.numero" label="Número" maxlength="20" :error-messages="erros.numero" required />
-                                <v-text-field v-model="endereco.bairro" label="Bairro" maxlength="100" :error-messages="erros.bairro" required />
-                                <v-text-field v-model="endereco.cidade" label="Cidade" maxlength="100" :error-messages="erros.cidade" required />
-                                <v-text-field v-model="endereco.uf" label="UF" maxlength="2" :error-messages="erros.uf" required />
-                                <v-text-field v-model="endereco.complemento" maxlength="100" label="Complemento" />
+                                <v-text-field v-model="cliente.endereco" label="Endereço" maxlength="255" :error-messages="erros.endereco" required />
+                                <v-text-field v-model="cliente.numero" label="Número" maxlength="20" :error-messages="erros.numero" required />
+                                <v-text-field v-model="cliente.bairro" label="Bairro" maxlength="100" :error-messages="erros.bairro" required />
+                                <v-text-field v-model="cliente.cidade" label="Cidade" maxlength="100" :error-messages="erros.cidade" required />
+                                <v-text-field v-model="cliente.uf" label="UF" maxlength="2" :error-messages="erros.uf" required />
+                                <v-text-field v-model="cliente.complemento" maxlength="100" label="Complemento" />
                             </div>
                         
                             <div v-else-if="currentStep === 3">
@@ -89,17 +89,14 @@
         email: '',
         telefone: '',
         status: '',
-        id_profissao: null,
-        id_endereco: null
-    })
-
-    const endereco = reactive({
         endereco: '',
         numero: '',
         bairro: '',
         cidade: '',
         uf: '',
-        complemento: ''
+        complemento: '',
+        id_profissao: null,
+        id_endereco: null
     })
 
     const erros = reactive({})
@@ -162,23 +159,23 @@
         }
 
         if (currentStep.value === 2) {
-            if (!endereco.endereco) {
+            if (!cliente.endereco) {
                 erros.endereco = 'Endereco é obrigatório'
                 valido = false
             }
-            if (!endereco.numero) {
+            if (!cliente.numero) {
                 erros.numero = 'Numero é obrigatório'
                 valido = false
             }
-            if (!endereco.bairro) {
+            if (!cliente.bairro) {
                 erros.bairro = 'Bairro é obrigatório'
                 valido = false
             }
-            if (!endereco.cidade) {
+            if (!cliente.cidade) {
                 erros.cidade = 'Cidade é obrigatório'
                 valido = false
             }
-            if (!endereco.uf) {
+            if (!cliente.uf) {
                 erros.uf = 'Uf é obrigatório'
                 valido = false
             }
@@ -271,12 +268,9 @@
         if (!validarEtapa()) return
 
         try {
-            const enderecoResponse = await axios.post('http://localhost:8000/api/enderecos', endereco)
-            const enderecoId = enderecoResponse.data.id 
-
-            cliente.id_endereco = enderecoId
             await axios.post('http://localhost:8000/api/clientes', cliente)
             router.push('/')
+            alert("Cliente criado com sucesso")
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {
                 alert('Erro ao salvar: ' + error.response.data.message)
